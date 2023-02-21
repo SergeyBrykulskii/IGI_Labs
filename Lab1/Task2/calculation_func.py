@@ -1,14 +1,4 @@
-def calculate(first_operand, second_operand, operation):
-    operations = ("add", "sub", "mult", "div")
-
-    if not first_operand.isdigit() or not second_operand.isdigit():
-        return None
-    if not operation in operations:
-        return None
-
-    first_operand = float(first_operand)
-    second_operand = float(second_operand)
-    
+def calculate(first_operand, second_operand, operation):   
     match operation:
         case "add":
             return first_operand + second_operand
@@ -17,4 +7,8 @@ def calculate(first_operand, second_operand, operation):
         case "mult":
             return first_operand * second_operand
         case "div":
+            if second_operand == 0:
+                raise Exception("Can't divide by zero")
             return first_operand / second_operand
+        case _:
+            raise Exception("Unknown operation")
