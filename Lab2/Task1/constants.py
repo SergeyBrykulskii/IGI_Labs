@@ -9,5 +9,5 @@ TWO_WORD_ABBREVIATION = ['e.g.', 'i.e.', 'p.m.', 'a.m.', 'p.s.']
 
 SENTENCE_REGEX = r'[.!?]+'
 NON_DECLARATIVE_SENTENCE_REGEX = r'[!?]+'
-WORD_REGEX = r'\w+'
+WORD_REGEX = r'[a-zA-Z]\w+'
 NUMBER_REGEX = r'^\d\w+| \d\w+'

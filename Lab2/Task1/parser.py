@@ -19,6 +19,12 @@ def count_average_sentence_length(text: str) -> float:
     number_of_sentences = count_sentences(text)
 
     number_of_words = len(re.findall(WORD_REGEX, text))
-    amount_of_numbers = len(re.findall(NUMBER_REGEX, text))
-    return (number_of_words - amount_of_numbers) / number_of_sentences
+    return number_of_words / number_of_sentences
 
+def count_average_word_length(text: str) -> float:
+    words = re.findall(WORD_REGEX, text)
+    number_of_letters = 0
+    for word in words:
+        number_of_letters += len(word)
+
+    return number_of_letters / len(words)
