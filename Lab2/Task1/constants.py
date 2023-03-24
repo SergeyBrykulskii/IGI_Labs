@@ -7,4 +7,4 @@ ONE_WORD_ABBREVIATION = [
     'ms.', 'mrs', 'smb', 'smth']
 TWO_WORD_ABBREVIATION = ['e.g.', 'i.e.', 'p.m.', 'a.m.', 'p.s.']
 SENTENCE_REGEX = r'[.!?]+'
-
+NON_DECLARATIVE_SENTENCE_REGEX = r'[!?]+'
