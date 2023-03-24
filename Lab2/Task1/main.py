@@ -1,6 +1,6 @@
 from parser import *
 from constants import *
-text = count_average_word_length('qwert!! mr.Asd...')
+text = get_top_K_repeated_N_grams('qwer!! mr.Ashd...')
 
 print(text)
 

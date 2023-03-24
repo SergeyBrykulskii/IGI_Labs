@@ -1,4 +1,5 @@
 import re
+from collections import Counter
 from constants import *
 
 def count_sentences(text: str) -> int:
@@ -28,3 +29,11 @@ def count_average_word_length(text: str) -> float:
         number_of_letters += len(word)
 
     return number_of_letters / len(words)
+
+def get_top_K_repeated_N_grams(text: str, k=10, n=4) -> list:
+    words = re.findall(WORD_REGEX, text)
+    counter = Counter() 
+    for word in words:
+        if (len(word) == n):
+            counter[word] += 1
+    return counter.most_common(k)
