@@ -1,6 +1,14 @@
-from parser import *
-from constants import *
-text = get_top_K_repeated_N_grams('qwer!! mr.Ashd...')
+from core import *
 
-print(text)
+source = get_source()
 
+match source:
+    case 'f':
+        text = get_text_from_file()
+    case 'c':
+        text = get_text_from_console()
+    case 'd':
+        text = DEFAULT_TEXT
+
+
+input_results(text)
