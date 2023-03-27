@@ -1,4 +1,6 @@
-from my_parser import *
+from my_parser import (count_sentences, count_non_declarative_sentences,
+                       count_average_sentence_length, count_average_word_length,
+                       get_top_K_repeated_N_grams)
 from constants import (INVALID_TEXT_REGEX, SOURCE_VARIANTS) 
 import re
 
@@ -29,6 +31,9 @@ def get_text_from_file(path='input.txt') -> str:
     text = f.read()
     text.replace('\n', ' ')
     text.replace('\t', ' ')
+    if re.findall(INVALID_TEXT_REGEX, text):
+        print("Invalid text")
+        text = ""
     return text
 
 

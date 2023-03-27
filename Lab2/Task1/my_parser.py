@@ -1,6 +1,7 @@
 import re
 from collections import Counter
-from constants import *
+from constants import (SENTENCE_REGEX, ONE_WORD_ABBREVIATION, TWO_WORD_ABBREVIATION,
+                       NON_DECLARATIVE_SENTENCE_REGEX, WORD_REGEX)
 
 
 def count_sentences(text: str) -> int:
@@ -11,7 +12,7 @@ def count_sentences(text: str) -> int:
         number_of_sentences -= text.count(abbreviation)
 
     for abbreviation in TWO_WORD_ABBREVIATION:
-        number_of_sentences -= text.count(abbreviation)
+        number_of_sentences -= text.count(abbreviation) * 2
     return number_of_sentences
     
 
@@ -32,13 +33,17 @@ def count_average_sentence_length(text: str) -> float:
     number_of_sentences = count_sentences(text)
     number_of_letters = count_number_of_letters(text)
 
+    if number_of_sentences == 0:
+        return 0
+    
     return number_of_letters / number_of_sentences
 
 
 def count_average_word_length(text: str) -> float:
     words = re.findall(WORD_REGEX, text)
     number_of_letters = count_number_of_letters(text)
-
+    if len(words) == 0:
+        return 0
     return number_of_letters / len(words)
 
 
