@@ -29,17 +29,17 @@ def get_text_from_console() -> str:
 def get_text_from_file(path='input.txt') -> str:
     f = open(path)
     text = f.read()
-    text.replace('\n', ' ')
-    text.replace('\t', ' ')
+    text = text.replace("\n", ' ')
+    text = text.replace("\t", ' ')
     if re.findall(INVALID_TEXT_REGEX, text):
         print("Invalid text")
         text = ""
     return text
 
 
-def input_results(text: str):
+def input_results(text: str, n=4, k=10):
     print('Amount of sentences in the text: ', count_sentences(text))
     print('Amount of non-declarative sentences in the text: ', count_non_declarative_sentences(text))
     print('Average length of the sentence in characters: ', count_average_sentence_length(text))
     print('Average length of the word in the text: ', count_average_word_length(text))
-    print('Top-K repeated N-grams in the text: ', get_top_K_repeated_N_grams(text))
+    print('Top-K repeated N-grams in the text: ', get_top_K_repeated_N_grams(text, k, n))

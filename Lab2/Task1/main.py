@@ -14,8 +14,19 @@ def main():
         case 'd':
             text = DEFAULT_TEXT
 
+    n = 4
+    k = 10
+    ans = input('Do you want change default n ans k(y/n):   ')
+    if ans == 'y':
+        while True:
+            n = input('Enter n:   ')
+            k = input('Enter k:   ')
+            if n.isdecimal() and k.isdecimal():
+                return
+            else:
+                print('Try again')
 
-    input_results(text) 
+    input_results(text, n, k) 
 
 if __name__ == "__main__":
     main()

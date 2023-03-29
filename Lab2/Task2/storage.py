@@ -7,13 +7,18 @@ class Storage:
         self._current_username = current_username
         self._file_path = "./user_data/" + current_username + ".json"
         self._data = set()
-        self.load()
 
 
-    def load(self):
-        if os.path.exists(self._file_path):
-            with open(self._file_path, 'r') as input_file:
-                self._data = set(json.load(input_file))
+    def load(self, path):
+        if not path:
+            path = self._file_path
+
+        if os.path.exists(path):
+            with open(path, 'r') as input_file:
+                load_set = set(json.load(input_file))
+                self._data |= load_set
+        else:
+            print('File not exists')
 
 
     def add(self, key: str):
@@ -48,5 +53,3 @@ class Storage:
         self._current_username = new_username
         self._file_path = "./user_data/" + new_username + ".json"
         self._data.clear()
-        self.load()
-
