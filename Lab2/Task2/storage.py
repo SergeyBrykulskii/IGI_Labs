@@ -35,8 +35,9 @@ class Storage:
         return self._data
     
 
-    def grep(self, regex: str) -> str:
-        valid_elements = str(list(filter(lambda x: re.match(regex, x), self._data)))
+    def grep(self, regex: str):
+        valid_elements = list(filter(lambda x: re.match(regex, x), self._data))
+        return valid_elements
         
     
     def find(self, key: str) -> bool:

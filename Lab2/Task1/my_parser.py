@@ -49,9 +49,17 @@ def count_average_word_length(text: str) -> float:
 
 def get_top_K_repeated_N_grams(text: str, k=10, n=4) -> list:
     words = re.findall(WORD_REGEX, text)
-    counter = Counter() 
+    
+    n_grams = []
+    n_grams.extend(list(zip(*[words[i:] for i in range(n)])))
+    counter = dict() 
 
-    for word in words:
-        if (len(word) == n):
-            counter[word] += 1
-    return counter.most_common(k)
+    for n_gram in n_grams:
+        key = ' '.join(n_gram)
+        counter.setdefault(key, 0)
+        counter[key] += 1
+
+    k_most_common_n_grams = dict(list({key: value for key, value in sorted(
+        counter.items(), key=lambda item: item[1], reverse=True)}.items())[:k])
+
+    return k_most_common_n_grams

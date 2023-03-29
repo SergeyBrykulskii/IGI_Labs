@@ -31,11 +31,13 @@ def execute_comand(command_name: str, command_arguments: str, current_storage: S
         case 'switch':
             is_save_file(current_storage)
             current_storage.switch(command_arguments)
-            print(f"Current user is {current_storage}")
+            print(f"Current user is {command_arguments}")
        
         case 'add':
             if command_arguments:
-                current_storage.add(command_arguments)
+                elems = command_arguments.split()
+                for el in elems:
+                    current_storage.add(el)
             
         case 'remove':
             if command_arguments:
@@ -45,6 +47,14 @@ def execute_comand(command_name: str, command_arguments: str, current_storage: S
             res = current_storage.grep(command_arguments)
             if len(res) != 0:
                 print('Found values: ' + str(res))
+            else:
+                print('No such element')
+
+        case 'find':
+            if current_storage.find(command_arguments):
+                print(command_arguments)
+            else:
+                print('No such element')
 
         case 'save':
             current_storage.save()
