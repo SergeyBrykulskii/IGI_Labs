@@ -23,7 +23,14 @@ def is_save_file(current_storage: Storage):
         if ans == 'n':
             break
         
-    
+def is_load_file(current_storage: Storage):
+    while True:
+        ans = input("Do you want to load storage from default file?(y/n):   ")
+        if ans == 'y':
+            current_storage.load("")
+            break
+        if ans == 'n':
+            break
 
 def execute_comand(command_name: str, command_arguments: str, current_storage: Storage):
     match command_name:
@@ -34,6 +41,8 @@ def execute_comand(command_name: str, command_arguments: str, current_storage: S
             is_save_file(current_storage)
             current_storage.switch(command_arguments)
             print(f"Current user is {command_arguments}")
+            is_load_file(current_storage)
+
        
         case 'add':
             if command_arguments:
@@ -74,14 +83,15 @@ def execute_comand(command_name: str, command_arguments: str, current_storage: S
 
 def main():
     user_name = input('Enter your name:  ')
-    current_storege = Storage(user_name)
+    current_storage = Storage(user_name)
     print(f'Welcome, {user_name}')
+    is_load_file(current_storage)
 
     while True:
         command, args = input_command()
         if command == 'exit':
             break
-        execute_comand(command, args, current_storege)
+        execute_comand(command, args, current_storage)
 
 
 if __name__ == "__main__":
