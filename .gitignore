@@ -5,8 +5,10 @@ __pycache__/
 
 # C extensions
 *.so
-*.json
+
 input.txt
+user_data
+
 # Distribution / packaging
 .Python
 build/
