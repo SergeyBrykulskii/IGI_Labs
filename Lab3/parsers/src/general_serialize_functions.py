@@ -5,6 +5,8 @@ import inspect
 def create_serializer(obj):
     if isinstance(obj, (float, int, complex, bool, str, type(None))):
         return serialize_fincbs
+    if isinstance(obj, (list, tuple, bytes)):
+        return serialize_ltb
     if inspect.isclass(obj):
         return serialize_class
 
@@ -31,6 +33,19 @@ def serialize_fincbs(fincbs):
     serialized_ficbs[constants.VALUE] = fincbs
 
     return serialized_ficbs
+
+
+def serialize_ltb(objects):
+    """
+    serialize objects to dict of type and value
+    :param objects: list, tuple, bytes
+    :return: dict with ["type"] and ["value"]
+    """
+    serialized_list = dict()
+    serialized_list[constants.TYPE] = re.search(constants.REGEX_TYPE, str(type(objects))).group(1)
+    serialized_list[constants.VALUE] = tuple([serialize(obj) for obj in objects])
+
+    return serialized_list
 
 
 def serialize_class(class_obj):

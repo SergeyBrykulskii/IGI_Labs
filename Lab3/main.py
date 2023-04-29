@@ -3,7 +3,7 @@ import os
 
 file_path = './test.json'
 
-x = 5
+x = [12, 12, 13]
 
 class A:
     b = 3
