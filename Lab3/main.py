@@ -3,11 +3,17 @@ import os
 
 file_path = './test.json'
 
-x = [12, 12, 13]
+x = {"a" : 12, "b" : 12,"c" : 13}
 
 class A:
-    b = 3
+    def __init__(self) -> None:
+        self.b = 3
+        self.a = 3
     
+
+
+def sum(a, b):
+    return a + b
 
 os.makedirs(os.path.dirname(file_path), exist_ok=True)
 with open(file_path, 'w') as output_file:

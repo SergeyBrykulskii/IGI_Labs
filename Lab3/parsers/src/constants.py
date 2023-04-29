@@ -1,5 +1,6 @@
 TYPE = "type"
 VALUE = "value"
+DICT = "dict"
 
 REGEX_TYPE = r"\'(\w+)\'"
 
@@ -20,3 +21,15 @@ NOT_CLASS_ATTRIBUTES = [
     "__new__",
     "__setattr__",
 ]
+
+FUNCTION = "function"
+
+FUNCTION_ATTRIBUTES = [
+    "__code__",
+    "__name__",
+    "__defaults__",
+    "__closure__"
+]
+
+CODE = "__code__"
+CLOSURE = "__closure__"

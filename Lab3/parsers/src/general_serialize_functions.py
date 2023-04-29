@@ -5,9 +5,13 @@ import inspect
 def create_serializer(obj):
     if isinstance(obj, (float, int, complex, bool, str, type(None))):
         return serialize_fincbs
-    if isinstance(obj, (list, tuple, bytes)):
+    elif isinstance(obj, (list, tuple, bytes)):
         return serialize_ltb
-    if inspect.isclass(obj):
+    elif isinstance(obj, dict):
+        return serialize_dict
+    elif inspect.isfunction(obj):
+        return serialize_function
+    elif inspect.isclass(obj):
         return serialize_class
 
 
@@ -46,6 +50,58 @@ def serialize_ltb(objects):
     serialized_list[constants.VALUE] = tuple([serialize(obj) for obj in objects])
 
     return serialized_list
+
+
+def serialize_dict(dict_object):
+    """
+    serialize dict_object to dict of type and value
+    :param dict_object: dict
+    :return: dict with ["type"] and ["value"]
+    """
+    serialized_dict = dict()
+    serialized_dict[constants.TYPE] = constants.DICT
+    serialized_dict[constants.VALUE] = {}
+
+    for i in dict_object:
+        key = serialize(i)
+        value = serialize(dict_object[i])
+        serialized_dict[constants.VALUE][key] = value
+
+    serialized_dict[constants.VALUE] = tuple((k, serialized_dict[constants.VALUE][k])
+                                             for k in serialized_dict[constants.VALUE])
+
+    return serialized_dict
+
+
+def serialize_function(function_object):
+    ans = dict()
+    ans[constants.TYPE] = constants.FUNCTION
+    ans[constants.VALUE] = {}
+    members = inspect.getmembers(function_object)
+    members = [i for i in members if i[0] in constants.FUNCTION_ATTRIBUTES]
+    for i in members:
+        key = serialize(i[0])
+        if i[0] != constants.CLOSURE:
+            value = serialize(i[1])
+        else:
+            value = serialize(None)
+
+        ans[constants.VALUE][key] = value
+        if i[0] == constants.CODE:
+            key = serialize(constants.GLOBALS)
+            ans[constants.VALUE][key] = {}
+            names = i[1].__getattribute__("co_names")
+            glob = function_object.__getattribute__(constants.GLOBALS)
+            glob_dict = {}
+            for name in names:
+                if name == function_object.__name__:
+                    glob_dict[name] = function_object.__name__
+                elif name in glob and not inspect.ismodule(name) and name not in __builtins__:
+                    glob_dict[name] = glob[name]
+            ans[constants.VALUE][key] = serialize(glob_dict)
+
+    ans[constants.VALUE] = tuple((k, ans[constants.VALUE][k]) for k in ans[constants.VALUE])
+    return ans
 
 
 def serialize_class(class_obj):
