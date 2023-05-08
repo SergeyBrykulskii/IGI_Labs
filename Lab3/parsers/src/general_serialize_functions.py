@@ -1,18 +1,32 @@
 import parsers.src.constants as constants
 import re
 import inspect
+from pydoc import locate
+from types import CodeType, FunctionType
 
 def create_serializer(obj):
     if isinstance(obj, (float, int, complex, bool, str, type(None))):
         return serialize_fincbs
-    elif isinstance(obj, (list, tuple, bytes)):
+    if isinstance(obj, (list, tuple, bytes)):
         return serialize_ltb
-    elif isinstance(obj, dict):
+    if isinstance(obj, dict):
         return serialize_dict
-    elif inspect.isfunction(obj):
+    if inspect.isfunction(obj):
         return serialize_function
-    elif inspect.isclass(obj):
+    if inspect.isclass(obj):
         return serialize_class
+    if inspect.iscode(obj):
+        return serialize_code
+    if inspect.ismodule(obj):
+        return serialize_module
+    if inspect.ismethoddescriptor(obj) or inspect.isbuiltin(obj):
+        return serialize_instance
+    if inspect.isgetsetdescriptor(obj) or inspect.ismemberdescriptor(obj):
+        return serialize_instance
+    if isinstance(obj, type(type.__dict__)):  # mappingproxy type
+        return serialize_instance
+
+    return serialize_object
 
 
 def serialize(obj):
@@ -104,6 +118,18 @@ def serialize_function(function_object):
     return ans
 
 
+
+def serialize_object(some_object):
+    class_obj = type(some_object)
+    ans = dict()
+    ans[constants.TYPE] = constants.OBJECT
+    ans[constants.VALUE] = {}
+    ans[constants.VALUE][serialize(constants.OBJECT_NAME)] = serialize(class_obj)
+    ans[constants.VALUE][serialize(constants.FIELDS_NAME)] = serialize(some_object.__dict__)
+    ans[constants.VALUE] = tuple((k, ans[constants.VALUE][k]) for k in ans[constants.VALUE])
+
+    return ans
+
 def serialize_class(class_obj):
     ans = dict()
     ans[constants.TYPE] = constants.CLASS
@@ -123,3 +149,162 @@ def serialize_class(class_obj):
     return ans
 
 
+def serialize_instance(instance_obj):
+    ans = dict()
+    ans[constants.TYPE] = re.search(constants.REGEX_TYPE, str(type(instance_obj))).group(1)
+
+    ans[constants.VALUE] = {}
+    members = inspect.getmembers(instance_obj)
+    members = [i for i in members if not callable(i[1])]
+    for i in members:
+        key = serialize(i[0])
+        val = serialize(i[1])
+        ans[constants.VALUE][key] = val
+    ans[constants.VALUE] = tuple((k, ans[constants.VALUE][k]) for k in ans[constants.VALUE])
+
+    return ans
+
+def serialize_code(instance_obj):
+    if re.search(constants.REGEX_TYPE, str(type(instance_obj))) is None:
+        return None
+
+    ans = dict()
+    ans[constants.TYPE] = re.search(constants.REGEX_TYPE, str(type(instance_obj))).group(1)
+
+    ans[constants.VALUE] = {}
+    members = inspect.getmembers(instance_obj)
+    members = [i for i in members if not callable(i[1])]
+    for i in members:
+        key = serialize(i[0])
+        val = serialize(i[1])
+        ans[constants.VALUE][key] = val
+    ans[constants.VALUE] = tuple((k, ans[constants.VALUE][k]) for k in ans[constants.VALUE])
+
+    return ans
+
+
+def serialize_module(module):
+    ans = dict()
+    ans[constants.TYPE] = constants.MODULE_NAME
+    ans[constants.VALUE] = re.search(constants.REGEX_TYPE, str(module)).group(1)
+
+    return ans
+
+
+def create_deserializer(object_type):
+    if object_type == constants.DICT:
+        return deserialize_dict
+    if object_type == constants.FUNCTION:
+        return deserialize_function
+    if object_type in [constants.LIST, constants.TUPLE, constants.BYTES]:
+        return deserialize_ltb
+    if object_type == constants.CLASS:
+        return deserialize_class
+    if object_type in [constants.FLOAT, constants.INT, constants.COMPLEX, constants.NONE_TYPE, constants.BOOL,
+                       constants.STRING]:
+        return deserialize_fincbs
+    if object_type == constants.OBJECT:
+        return deserialize_object
+    if object_type == constants.MODULE_NAME:
+        return deserialize_module
+
+
+def deserialize(d):
+    d = dict((a, b) for a, b in d)
+    object_type = d[constants.TYPE]
+    deserializer = create_deserializer(object_type)
+
+    if deserializer is None:
+        return
+
+    return deserializer(object_type, d[constants.VALUE])
+
+
+def deserialize_fincbs(object_type, fincbs=None):
+    if object_type == constants.NONE_TYPE:
+        return None
+
+    if object_type == constants.BOOL and isinstance(fincbs, str):
+        return fincbs == constants.TRUE
+
+    return locate(object_type)(fincbs)
+
+
+def deserialize_ltb(object_type, ltb):
+    if object_type == constants.LIST:
+        return [deserialize(i) for i in ltb]
+
+    if object_type == constants.TUPLE:
+        return tuple([deserialize(i) for i in ltb])
+
+    if object_type == constants.BYTES:
+        return bytes([deserialize(i) for i in ltb])
+
+
+def deserialize_dict(object_type, dictionary):
+    ans = {}
+    for i in dictionary:
+        val = deserialize(i[1])
+        ans[deserialize(i[0])] = val
+
+    return ans
+
+
+def deserialize_function(object_type, foo):
+    func = [0] * 4
+    code = [0] * 16
+    glob = {constants.BUILTINS: __builtins__}
+
+    for i in foo:
+        key = deserialize(i[0])
+
+        if key == constants.GLOBALS:
+            glob_dict = deserialize(i[1])
+            for glob_key in glob_dict:
+                glob[glob_key] = glob_dict[glob_key]
+
+        elif key == constants.CODE:
+            val = i[1][1][1]
+
+            for arg in val:
+                code_arg_key = deserialize(arg[0])
+                if code_arg_key != constants.DOC:
+                    code_arg_val = deserialize(arg[1])
+                    index = constants.CODE_OBJECT_ARGS.index(code_arg_key)
+                    code[index] = code_arg_val
+
+            code = CodeType(*code)
+        else:
+            index = constants.FUNCTION_ATTRIBUTES.index(key)
+            func[index] = (deserialize(i[1]))
+
+    func[0] = code
+    func.insert(1, glob)
+
+    ans = FunctionType(*func)
+    if ans.__name__ in ans.__getattribute__(constants.GLOBALS):
+        ans.__getattribute__(constants.GLOBALS)[ans.__name__] = ans
+
+    return ans
+
+
+def deserialize_object(object_type, obj):
+    obj_dict = deserialize_dict(constants.DICT, obj)
+    result = obj_dict[constants.OBJECT_NAME]()
+
+    for key, value in obj_dict[constants.FIELDS_NAME].items():
+        result.key = value
+
+    return result
+
+
+def deserialize_class(object_type, class_dict):
+    some_dict = deserialize_dict(constants.DICT, class_dict)
+    name = some_dict[constants.NAME_NAME]
+    del some_dict[constants.NAME_NAME]
+
+    return type(name, (object,), some_dict)
+
+
+def deserialize_module(object_type, module_name):
+    return __import__(module_name)

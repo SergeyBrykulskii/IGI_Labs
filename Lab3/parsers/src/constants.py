@@ -2,6 +2,10 @@ TYPE = "type"
 VALUE = "value"
 DICT = "dict"
 
+GLOBALS = "__globals__"
+BUILTINS = "__builtins__"
+DOC = "__doc__"
+
 REGEX_TYPE = r"\'(\w+)\'"
 
 NAME_NAME = "__name__"
@@ -33,3 +37,36 @@ FUNCTION_ATTRIBUTES = [
 
 CODE = "__code__"
 CLOSURE = "__closure__"
+
+LIST = "list"
+TUPLE = "tuple"
+BYTES = "bytes"
+
+FLOAT = "float"
+INT = "int"
+NONE_TYPE = "NoneType"
+COMPLEX = "complex"
+BOOL = "bool"
+STRING = "str"
+
+
+TRUE = "True"
+
+CODE_OBJECT_ARGS = [
+    'co_argcount',
+    'co_posonlyargcount',
+    'co_kwonlyargcount',
+    'co_nlocals',
+    'co_stacksize',
+    'co_flags',
+    'co_code',
+    'co_consts',
+    'co_names',
+    'co_varnames',
+    'co_filename',
+    'co_name',
+    'co_firstlineno',
+    'co_lnotab',
+    'co_freevars',
+    'co_cellvars',
+]

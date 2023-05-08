@@ -12,9 +12,9 @@ class A:
     
 
 
-def sum(a, b):
+def sm(a, b):
     return a + b
 
 os.makedirs(os.path.dirname(file_path), exist_ok=True)
 with open(file_path, 'w') as output_file:
-    JsonParser.dump(x, output_file)
+    JsonParser.dump(sm, output_file)
