@@ -16,6 +16,9 @@ def sm(a, b):
 
 # print(s[:-1])
 
+class A:
+    self._init_
+
 os.makedirs(os.path.dirname(file_path_json), exist_ok=True)
 with open(file_path_json, 'w') as output_file:
     JsonParser.dump(sm, output_file)
@@ -25,8 +28,8 @@ with open(file_path_json, 'r') as input_file:
     print(sm(1, 3))
 os.makedirs(os.path.dirname(file_path_xml), exist_ok=True)
 with open(file_path_xml, 'w') as output_file:
-    XmlParser.dump(y, output_file)
+    XmlParser.dump(sm, output_file)
 
 with open(file_path_xml, 'r') as input_file:
     a = XmlParser.load(input_file)
-    print(a)
+    print(a(1, 4))

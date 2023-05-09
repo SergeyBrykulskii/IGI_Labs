@@ -268,7 +268,7 @@ def deserialize_function(object_type, foo):
 
             for arg in val:
                 code_arg_key = deserialize(arg[0])
-                if code_arg_key != constants.DOC:
+                if code_arg_key != constants.DOC and code_arg_key != 'co_linetable':
                     code_arg_val = deserialize(arg[1])
                     index = constants.CODE_OBJECT_ARGS.index(code_arg_key)
                     code[index] = code_arg_val
