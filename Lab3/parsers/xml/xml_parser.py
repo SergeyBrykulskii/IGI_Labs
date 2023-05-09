@@ -11,7 +11,7 @@ class XmlParser:
 
     @staticmethod
     def dump(obj, file):
-        file.write(JsonParser.dumps(obj))
+        file.write(XmlParser.dumps(obj))
 
     @staticmethod
     def loads(obj: str):
@@ -20,4 +20,4 @@ class XmlParser:
 
     @staticmethod
     def load(file):
-        return JsonParser.loads(file.read())
+        return XmlParser.loads(file.read())
