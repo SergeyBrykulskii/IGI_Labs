@@ -8,7 +8,7 @@ from parsers.json.json_parser import JsonParser
 from parsers.xml.xml_parser import XmlParser
 
 import math
-
+import constants
 import pytest
 
 test_list = [1, "qwe", 3, 22.8, (1, 2, 3), False, None]
@@ -122,17 +122,9 @@ def test_dict():
     dict4 = {1: dict1.copy(), 2: dict2.copy(), 3: dict3.copy()}
     dict5 = {"42": 42}
 
-    assert (str(serialize_dict(dict1)) == "{'type': 'dict', 'value': ()}")
-    assert (str(serialize_dict(
-        dict2)) == "{'type': 'dict', 'value': (((('type', 'int'), "
-                   "('value', 4)), (('type', 'int'), ('value', 42))), "
-                   "((('type', 'int'), ('value', 5)), (('type', 'int'), ('value', 42))),"
-                   " ((('type', 'int'), ('value', 2)), (('type', 'int'), ('value', 42))))}")
-    assert (str(serialize_dict(
-        dict3)) == "{'type': 'dict', 'value': (((('type', 'tuple'), "
-                   "('value', ((('type', 'str'), ('value', '42')), (('type', 'str'), ('value', '42'))))),"
-                   " (('type', 'list'), ('value', ((('type', 'str'), ('value', '42')),)))), ((('type', 'int'),"
-                   " ('value', 42)), (('type', 'str'), ('value', '42'))))}")
+    assert (str(serialize_dict(dict1)) == constants.DICT1)
+    assert (str(serialize_dict(dict2)) == constants.DICT2)
+    assert (str(serialize_dict(dict3)) == constants.DICT3)
 
     assert (dict1 == deserialize(serialize(dict1)))
     assert (dict2 == deserialize(serialize(dict2)))

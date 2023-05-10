@@ -1,0 +1,3 @@
+DICT1 = "{'type': 'dict', 'value': ()}"
+DICT2 = "{'type': 'dict', 'value': (((('type', 'int'), ('value', 4)), (('type', 'int'), ('value', 42))), ((('type', 'int'), ('value', 5)), (('type', 'int'), ('value', 42))), ((('type', 'int'), ('value', 2)), (('type', 'int'), ('value', 42))))}"
+DICT3 = "{'type': 'dict', 'value': (((('type', 'tuple'), ('value', ((('type', 'str'), ('value', '42')), (('type', 'str'), ('value', '42'))))), (('type', 'list'), ('value', ((('type', 'str'), ('value', '42')),)))), ((('type', 'int'), ('value', 42)), (('type', 'str'), ('value', '42'))))}"
