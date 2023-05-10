@@ -10,7 +10,6 @@ def serialize_xml(obj) -> str:
                     f"{serialize_xml(i)}")
         ans = "".join(serialized)
         return f"<{type(obj).__name__}>{ans}</{type(obj).__name__}> "
-        # return f"{ans}"
     else:
         return obj
 

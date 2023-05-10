@@ -25,19 +25,21 @@ class Person:
     def get_age(self):
         return self.age
 
+test = Person(7)
+
 os.makedirs(os.path.dirname(file_path_json), exist_ok=True)
 with open(file_path_json, 'w') as output_file:
-    JsonParser.dump(Person, output_file)
+    JsonParser.dump(test, output_file)
 
 with open(file_path_json, 'r') as input_file:
     a = JsonParser.load(input_file)
     per = Person()
-    p = a()
-    print(p.get_age() == per.get_age())
+   
+    print(a.get_age())
 os.makedirs(os.path.dirname(file_path_xml), exist_ok=True)
 with open(file_path_xml, 'w') as output_file:
-    XmlParser.dump(sm, output_file)
+    XmlParser.dump(Person, output_file)
 
-with open(file_path_xml, 'r') as input_file:
-    a = XmlParser.load(input_file)
-    print(sm(2, 4))
+# with open(file_path_xml, 'r') as input_file:
+#     a = XmlParser.load(input_file)
+#     print(sm(2, 4))
