@@ -40,6 +40,4 @@ os.makedirs(os.path.dirname(file_path_xml), exist_ok=True)
 with open(file_path_xml, 'w') as output_file:
     XmlParser.dump(Person, output_file)
 
-# with open(file_path_xml, 'r') as input_file:
-#     a = XmlParser.load(input_file)
-#     print(sm(2, 4))
+
