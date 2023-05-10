@@ -8,7 +8,7 @@ from parsers.json.json_parser import JsonParser
 from parsers.xml.xml_parser import XmlParser
 
 import math
-import constants
+import tests.constants as constants
 import pytest
 
 test_list = [1, "qwe", 3, 22.8, (1, 2, 3), False, None]
@@ -44,7 +44,7 @@ def test_vars(n):
 
 
 class Human:
-    religion = "hi"
+    test = "hi"
 
     def __init__(self, id=3):
         self.id = id
@@ -61,7 +61,7 @@ class SomeClass:
         for i in range(person_number):
             self.persons.append(SomeClass(i))
 
-    def get_some_useless_info(self):
+    def get_info(self):
         result = 0
         for person in self.persons:
             result += person.age
@@ -96,23 +96,17 @@ def test_ltb_types():
     tuple2 = ("42", 42, -42)
     tuple3 = (("42", 42), True)
 
-    assert (str(serialize_ltb(list1)) == "{'type': 'list', 'value': ()}")
+    assert (str(serialize_ltb(list1)) == constants.LIST1)
     assert (str(serialize_ltb(
-        list2)) == "{'type': 'list', 'value': ((('type', 'str'), ('value', '42')), "
-                   "(('type', 'int'), ('value', 42)), (('type', 'int'), ('value', -42)))}")
+        list2)) == constants.LIST2)
     assert (str(serialize_ltb(
-        list3)) == "{'type': 'list', 'value': ((('type', 'list'), ('value', "
-                   "((('type', 'str'), ('value', '42')), (('type', 'int'), ('value', 42))))),"
-                   " (('type', 'bool'), ('value', True)))}")
+        list3)) == constants.LIST3)
 
-    assert (str(serialize_ltb(tuple1)) == "{'type': 'tuple', 'value': ()}")
+    assert (str(serialize_ltb(tuple1)) == constants.TUPLE1)
     assert (str(serialize_ltb(
-        tuple2)) == "{'type': 'tuple', 'value': ((('type', 'str'), ('value', '42')), "
-                    "(('type', 'int'), ('value', 42)), (('type', 'int'), ('value', -42)))}")
+        tuple2)) == constants.TUPLE2)
     assert (str(serialize_ltb(
-        tuple3)) == "{'type': 'tuple', 'value': ((('type', 'tuple'), "
-                    "('value', ((('type', 'str'), ('value', '42')), (('type', 'int'), "
-                    "('value', 42))))), (('type', 'bool'), ('value', True)))}")
+        tuple3)) == constants.TUPLE3)
 
 
 def test_dict():
@@ -131,5 +125,40 @@ def test_dict():
     assert (dict3 == deserialize(serialize(dict3)))
     assert (dict4 == deserialize(serialize(dict4)))
     assert (dict5 == deserialize(serialize(dict5)))
+
+
+def test_foo():
+    functions = [test_mul, test_fact, test_wrapper, test_vars]
+    for some_function in functions:
+        sd_function = deserialize(serialize(some_function))
+        assert (sd_function(5) == some_function(5))
+
+    sd_func_with_builtin_func = deserialize(serialize(func_with_builtin_func))
+    assert (sd_func_with_builtin_func([5, 4, -1, 15]) == func_with_builtin_func([5, 4, -1, 15]))
+
+
+def test_class():
+    sd_class = deserialize(serialize(Human))
+    sd_object = sd_class(15)
+    person = Human(15)
+
+    assert (person.test == sd_object.test)
+    assert (person.get_id() == sd_object.get_id())
+
+
+def test_object():
+    person = Human(3)
+    sd_person = deserialize(serialize(person))
+    assert (sd_person.id == person.id)
+    assert (sd_person.id == person.id)
+    assert (sd_person.get_id() == sd_person.get_id())
+
+
+def test_lambda():
+    x = lambda a: a + 10
+    y = deserialize(serialize(lambda a: a + 10))
+    z = deserialize(serialize(x))
+    assert (x(10) == y(10) == z(10))
+
 
 
