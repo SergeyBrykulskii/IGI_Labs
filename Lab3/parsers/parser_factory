@@ -1,0 +1,19 @@
+from json.json_parser import JsonParser
+from xml.xml_parser import XmlParser
+
+class ParserFactory:
+    @staticmethod
+    def create_parser(name: str):
+        """
+        create serializer(json or xml)
+        or reise exeption
+        """
+
+        name = name.lower()
+        if name == "json":
+            return JsonParser
+
+        if name == "xml":
+            return XmlParser
+
+        raise ValueError(f"Format {name} is not supported")
