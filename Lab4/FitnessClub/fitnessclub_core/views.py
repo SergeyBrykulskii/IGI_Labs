@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.core.exceptions import PermissionDenied
-from .models import Gym, GymMembership, Schedule
+from .models import Gym, GymMembership, Schedule, GroupClass
 from .forms import GymMembershipForm
 
 
@@ -38,3 +38,12 @@ def create_gym_membership(request):
 
     return render(request, 'fitnessclub_core/create_gym_membership.html', {'form': form})
 
+def group_class_list(request):
+    group_class_list = GroupClass.objects.all()
+
+    return render(request, 'fitnessclub_core/group_class_list.html', {'group_class_list': group_class_list})
+
+def group_class_detail(request, id):
+    group_class = get_object_or_404(GroupClass, id=id)
+
+    return render(request, 'fitnessclub_core/group_class_detail.html', {'group_class': group_class})

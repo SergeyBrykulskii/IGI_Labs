@@ -40,7 +40,20 @@ class Gym(models.Model):
     gym_membership = models.ManyToManyField(GymMembership, help_text='Gym membership of the gym')
 
     def get_absolute_url(self):
-        return reverse('gym_detail', args=[str(self.id)])
+        return reverse('group_class_list', args=[str(self.id)])
+
+    def __str__(self) -> str:
+        return f'{self.name}'
+    
+
+class GroupClass(models.Model):
+    name = models.CharField(max_length=20, help_text='Name of the group class')
+    description = models.TextField(max_length=200, help_text='Description of the group class')
+    gym = models.ForeignKey(Gym, on_delete=models.CASCADE, help_text='Gym of the group class', null=True)
+    # trainer = models.ForeignKey(Trainer, on_delete=models.CASCADE, help_text='Trainer of the group class', null=True)
+
+    def get_absolute_url(self):
+        return reverse('group_class_detail', args=[str(self.id)])
 
     def __str__(self) -> str:
         return f'{self.name}'
