@@ -37,7 +37,7 @@ class Gym(models.Model):
     name = models.CharField(max_length=20, help_text='Name of the gym')
     address = models.CharField(max_length=30, help_text='Address of the gym')
     schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, help_text='Schedule of the gym', null=True)
-    gym_membership = models.ManyToManyField(GymMembership, help_text='Gym membership of the gym')
+    gym_membership = models.ManyToManyField(GymMembership, help_text='Gym membership of the gym', blank=True)
 
     def get_absolute_url(self):
         return reverse('group_class_list', args=[str(self.id)])
