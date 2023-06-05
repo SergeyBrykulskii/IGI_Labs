@@ -9,7 +9,7 @@ class ClientManager(BaseUserManager):
         if not last_name:
             raise ValueError('The given username must be set')
 
-        email.self.normalize_email(email)
+        email = self.normalize_email(email)
 
         user = self.model(email=email, first_name=first_name, last_name=last_name,
                            address=address, birthday=birthday, phone_number=phone_number, **extra_fields)

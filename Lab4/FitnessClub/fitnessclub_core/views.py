@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.core.exceptions import PermissionDenied
 from .models import Gym, GymMembership, Schedule, GroupClass
-from .forms import GymMembershipForm
+from .forms import GymMembershipForm, GroupClassForm
 
 
 def main_page(request):
@@ -47,3 +47,50 @@ def group_class_detail(request, id):
     group_class = get_object_or_404(GroupClass, id=id)
 
     return render(request, 'fitnessclub_core/group_class_detail.html', {'group_class': group_class})
+
+def create_group_class(request):
+    if not request.user.is_staff:
+        raise PermissionDenied("You are not allowed to access this page.")
+    
+    form = GroupClassForm()
+
+    if request.method == 'POST':
+        form = GroupClassForm(request.POST)
+
+        if form.is_valid():
+            group_class = form.save()
+            return redirect('group_class_detail', id=group_class.id)
+    
+    return render(request, 'fitnessclub_core/create_group_class.html', {'form': form})
+
+def edit_group_class(request, id):
+    if not request.user.is_staff:
+        raise PermissionDenied("Permission denied!")
+    
+    group_class = None
+    try:
+        group_class = get_object_or_404(GroupClass, id=id)
+    except:
+        return HttpResponseNotFound('<h1>Group class not found</h1>')
+
+    if request.method == 'POST':
+        form = GroupClassForm(request.POST, instance=group_class)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = GroupClassForm(instance=group_class)
+
+    return render(request, 'fitnessclub_core/edit_group_class.html', {'form': form, 'group_class': group_class})
+
+def delete_group_class(request, id):
+    if not request.user.is_staff:
+        raise PermissionDenied("Permission denied!")
+    
+    group_class = None
+    try:
+        group_class = get_object_or_404(GroupClass, id=id)
+        group_class.delete()
+        return redirect('/')
+    except:
+        return HttpResponseNotFound('<h1>Group class not found</h1>')
