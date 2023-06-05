@@ -51,13 +51,13 @@
     </div>
     <div id="subheader">
         <div class="cart">
-            <!--{% if user.is_authenticated %}
+            {% if user.is_authenticated %}
             Hello, {{ user.username }}!
             <a href="{% url 'login:logout' %}">Log out</a>
             {% else %}
-            <a href="{% url 'login:signup' %}">Sign up</a>
-            <a href="{% url 'login:signin' %}">Sign in</a>
-            {% endif %}-->
+            <a href="{% url 'login:registration' %}">Registration</a>
+            <a href="{% url 'login:login' %}">Log in</a>
+            {% endif %}
         </div>
     </div>
     <div id="content">
