@@ -79,7 +79,7 @@ def edit_group_class(request, id):
         form = GroupClassForm(request.POST, instance=group_class)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect(f'/group_class/{group_class.id}')
     else:
         form = GroupClassForm(instance=group_class)
 

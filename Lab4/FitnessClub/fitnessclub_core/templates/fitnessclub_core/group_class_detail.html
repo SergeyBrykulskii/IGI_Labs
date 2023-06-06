@@ -4,6 +4,7 @@
 {% block content %}
 <h1>{{ group_class.name }}</h1>
 <p>Description: {{ group_class.description }}</p>
+<p>Cost: {{ group_class.cost }}</p>
 <p>Gym: <a href="{{ group_class.gym.get_absolute_url }}">{{ group_class.gym.name }}</a></p>
 {% if request.user.is_staff %}
     <p><a href="{% url 'fitnessclub_core:edit_group_class' group_class.id %}", class="button">Edit</a></p>

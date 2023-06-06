@@ -11,7 +11,7 @@ class GymAdmin(admin.ModelAdmin):
     list_display = ['name', 'address', 'display_group_classes']
     list_filter = ['schedule', 'gym_membership']
     inlines = [GroupClassInline]
-    
+
     def display_group_classes(self, obj):
         return ", ".join([group_class.name for group_class in obj.group_classes.all()])  
 
@@ -31,7 +31,7 @@ class ScheduleAdmin(admin.ModelAdmin):
 
 @admin.register(GroupClass)
 class GroupClassAdmin(admin.ModelAdmin):
-    list_display = ['name', 'description', 'gym']
+    list_display = ['name', 'description', 'cost', 'gym']
     list_filter = ['gym']
     fields = [('name', 'description'), 'gym']
 

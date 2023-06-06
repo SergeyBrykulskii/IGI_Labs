@@ -10,4 +10,4 @@ class GymMembershipForm(forms.ModelForm):
 class GroupClassForm(forms.ModelForm):
     class Meta:
         model = GroupClass
-        fields = ['name', 'description', 'gym']
+        fields = ['name', 'description', 'cost', 'gym']

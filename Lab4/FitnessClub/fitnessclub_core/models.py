@@ -50,6 +50,7 @@ class GroupClass(models.Model):
     name = models.CharField(max_length=20, help_text='Name of the group class')
     description = models.TextField(max_length=200, help_text='Description of the group class')
     gym = models.ForeignKey(Gym, on_delete=models.CASCADE, help_text='Gym of the group class', null=True, related_name='group_classes')
+    cost = models.IntegerField(help_text='Cost of the group class', default=0)
     # trainer = models.ForeignKey(Trainer, on_delete=models.CASCADE, help_text='Trainer of the group class', null=True)
 
     def get_absolute_url(self):
