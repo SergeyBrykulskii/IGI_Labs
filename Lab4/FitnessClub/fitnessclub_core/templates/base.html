@@ -11,9 +11,9 @@
 <body>
     <div id="header">
         <br>
-        <p>Current date <span id="date"></span></p>
-        <p>Current time <span id="time"></span></p>
-        <p>Current time zone <span id="zone"></span></p>
+        <p>Date <span id="date"></span></p>
+        <p>Time <span id="time"></span></p>
+        <p>Time zone <span id="zone"></span></p>
         <script>
             const today = new Date();
             const formattedToday = today.toLocaleDateString();
@@ -26,7 +26,7 @@
         </script>
         <div class="cart">
             {% if user.is_authenticated %}
-                Hello, {{ user.username }}!
+                Hello, {{ user.username }}
                 <a href="{% url 'login:logout' %}">Log out</a>
             {% else %}
                 <a href="{% url 'login:registration' %}">Registration</a>

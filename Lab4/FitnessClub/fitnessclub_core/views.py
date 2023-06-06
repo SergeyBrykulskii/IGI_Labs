@@ -15,31 +15,33 @@ def gym_list(request):
 
 def gym_detail(request, id):
     gym = get_object_or_404(Gym, id=id)
+    group_class_list = gym.group_classes.all()
 
-    return render(request, 'fitnessclub_core/gym_detail.html', {'gym': gym})
+    return render(request, 'fitnessclub_core/gym_detail.html', {'gym': gym, 'group_class_list': group_class_list})
 
-def gym_membership_detail(request, id):
-    gym_membership = get_object_or_404(GymMembership, id=id)
+# def gym_membership_detail(request, id):
+#     gym_membership = get_object_or_404(GymMembership, id=id)
 
-    return render(request, 'fitnessclub_core/gym_membership_detail.html', {'gym_membership': gym_membership})
+#     return render(request, 'fitnessclub_core/gym_membership_detail.html', {'gym_membership': gym_membership})
 
-def create_gym_membership(request):
-    if not request.user.is_staff:
-        raise PermissionDenied("You are not allowed to access this page.")
+# def create_gym_membership(request):
+#     if not request.user.is_staff:
+#         raise PermissionDenied("You are not allowed to access this page.")
     
-    form = GymMembershipForm()
+#     form = GymMembershipForm()
 
-    if request.method == 'POST':
-        form = GymMembershipForm(request.POST)
+#     if request.method == 'POST':
+#         form = GymMembershipForm(request.POST)
 
-        if form.is_valid():
-            gym_membership = form.save()
-            return redirect('gym_membership_detail', id=gym_membership.id)
+#         if form.is_valid():
+#             gym_membership = form.save()
+#             return redirect('gym_membership_detail', id=gym_membership.id)
 
-    return render(request, 'fitnessclub_core/create_gym_membership.html', {'form': form})
+#     return render(request, 'fitnessclub_core/create_gym_membership.html', {'form': form})
 
-def group_class_list(request):
-    group_class_list = GroupClass.objects.all()
+def group_class_list(request, id):
+    gym = get_object_or_404(Gym, id=id)
+    group_class_list = gym.group_classes.all()
 
     return render(request, 'fitnessclub_core/group_class_list.html', {'group_class_list': group_class_list})
 

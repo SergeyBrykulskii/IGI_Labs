@@ -36,11 +36,11 @@ class GymMembership(models.Model):
 class Gym(models.Model):
     name = models.CharField(max_length=20, help_text='Name of the gym')
     address = models.CharField(max_length=30, help_text='Address of the gym')
-    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, help_text='Schedule of the gym', null=True)
-    gym_membership = models.ManyToManyField(GymMembership, help_text='Gym membership of the gym', blank=True)
+    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, help_text='Schedule of the gym', null=True, related_name='gyms')
+    gym_membership = models.ManyToManyField(GymMembership, help_text='Gym membership of the gym', blank=True, related_name='gyms')
 
     def get_absolute_url(self):
-        return reverse('group_class_list', args=[str(self.id)])
+        return reverse('fitnessclub_core:gym_detail', args=[str(self.id)])
 
     def __str__(self) -> str:
         return f'{self.name}'
@@ -49,11 +49,11 @@ class Gym(models.Model):
 class GroupClass(models.Model):
     name = models.CharField(max_length=20, help_text='Name of the group class')
     description = models.TextField(max_length=200, help_text='Description of the group class')
-    gym = models.ForeignKey(Gym, on_delete=models.CASCADE, help_text='Gym of the group class', null=True)
+    gym = models.ForeignKey(Gym, on_delete=models.CASCADE, help_text='Gym of the group class', null=True, related_name='group_classes')
     # trainer = models.ForeignKey(Trainer, on_delete=models.CASCADE, help_text='Trainer of the group class', null=True)
 
     def get_absolute_url(self):
-        return reverse('group_class_detail', args=[str(self.id)])
+        return reverse('fitnessclub_core:group_class_detail', args=[str(self.id)])
 
     def __str__(self) -> str:
         return f'{self.name}'
