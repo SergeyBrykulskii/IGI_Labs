@@ -16,4 +16,7 @@
     <li>No group classes available.</li>
     {% endfor %}
 </ul>
+{% if request.user.is_staff %}
+<a href="{% url 'fitnessclub_core:create_group_class' %}" class="button">Create Group Class</a>
+{% endif %}
 {% endblock %}
