@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'fitnessclub_core',
     'login',
+    'cart',
+    'order',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +130,5 @@ STATICFILES_DIRS = [path.join(BASE_DIR, 'static')]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'login.Client'
+
+CART_SESSION_ID = 'cart'

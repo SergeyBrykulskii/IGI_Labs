@@ -3,10 +3,7 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.core.exceptions import PermissionDenied
 from .models import Gym, GymMembership, Schedule, GroupClass
 from .forms import GymMembershipForm, GroupClassForm
-
-
-def main_page(request):
-    return HttpResponse('<h4>Abrqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwacodabra</h4>')
+from cart.forms import AddGroupClassForm
 
 def gym_list(request):
     gym_list = Gym.objects.all()
@@ -48,7 +45,7 @@ def group_class_list(request, id):
 def group_class_detail(request, id):
     group_class = get_object_or_404(GroupClass, id=id)
 
-    return render(request, 'fitnessclub_core/group_class_detail.html', {'group_class': group_class})
+    return render(request, 'fitnessclub_core/group_class_detail.html', {'group_class': group_class, 'add_to_cart_form': AddGroupClassForm()})
 
 def create_group_class(request):
     if not request.user.is_staff:

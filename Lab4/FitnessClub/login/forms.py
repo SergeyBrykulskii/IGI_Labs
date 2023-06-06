@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import Client
+from collections import OrderedDict
+
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(max_length=100, help_text='Required', required=True)
@@ -22,6 +24,16 @@ class RegistrationForm(UserCreationForm):
             'phone_number', 
             'password1', 
             'password2', }
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields = OrderedDict(
+            (field_name, self.fields[field_name])
+            for field_name in [
+                'username', 'email', 'first_name', 'last_name','address', 'birthday',
+                'phone_number', 'password1', 'password2'
+            ]
+        )
         
     def save(self, commit: bool):
         user = super(RegistrationForm, self).save(commit=False)
